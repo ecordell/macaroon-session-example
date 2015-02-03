@@ -1,0 +1,74 @@
+/.DS_Store
+
+/.env
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+env/
+build/
+develop-eggs/
+dist/
+eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.cache
+output.xml
+nosetests.xml
+coverage.xml
+
+# Translations
+*.mo
+*.pot
+
+# Django stuff:
+*.log
+
+# Sphinx documentation
+docs/_build/
+
+/boot2docker-cli/
+
+/boot2docker
+
+/.container-id
+
+/vagrant/.vagrant/
+
+/.vagrant/
+
+/localmed-iam.tar
+
+/fig.yml
+
+/env.yml
+
+# Assets
+/app/assets/.bundle
+/app/assets/.sass-cache
+/app/assets/npm-debug.log
+/app/assets/static
+/app/assets/vendor
+
+.idea
