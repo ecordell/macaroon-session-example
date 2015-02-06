@@ -1,3 +1,8 @@
+{% extends "layout.html" %}
+
+{% block title %}Log In{% endblock title %}
+
+{% block content %}
 {% macro render_field(field, placeholder=None) %}
 {% if field.errors %}
 <div>
@@ -48,3 +53,4 @@
     </form>
   </div>
 </div>
+{% endblock content %}

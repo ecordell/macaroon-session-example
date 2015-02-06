@@ -72,3 +72,5 @@ docs/_build/
 /app/assets/vendor
 
 .idea
+
+/node_modules/

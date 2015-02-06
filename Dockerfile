@@ -24,6 +24,17 @@ RUN wget https://github.com/jedisct1/libsodium/releases/download/1.0.0/libsodium
   cd .. && rm -rf libsodium-1.0.0 && \
   sudo ldconfig
 
+
+## Install Node/Npm
+ENV NODE_VERSION 0.11.14
+ENV NPM_VERSION 2.1.6
+
+RUN wget -q "http://nodejs.org/dist/v$NODE_VERSION/node-v$NODE_VERSION-linux-x64.tar.gz" \
+  && tar -xzf "node-v$NODE_VERSION-linux-x64.tar.gz" -C /usr/local --strip-components=1 \
+  && rm "node-v$NODE_VERSION-linux-x64.tar.gz" \
+  && npm install -g npm@"$NPM_VERSION" \
+  && npm cache clear
+
 # App User
 RUN useradd -ms /bin/bash app
 RUN adduser app sudo
@@ -37,8 +48,19 @@ EXPOSE 8000
 USER app
 
 WORKDIR /usr/src/app/
+
+# Install Python dependencies
 ADD requirements.txt /usr/src/app/requirements.txt
 RUN sudo pip3 install -r requirements.txt
 
+# Install Node dependencies
+ADD package.json /usr/src/app/package.json
+RUN sudo npm install
+
 ADD . /usr/src/app/
 RUN sudo chown -R app /usr/src/app/
+
+# Browserify
+RUN ./node_modules/browserify/bin/cmd.js app/static/scripts/main.js -o app/static/bundle.js
+RUN ./node_modules/browserify/bin/cmd.js app/static/scripts/refresh_auth.js -o app/static/refresh_auth_bundle.js
+

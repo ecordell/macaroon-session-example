@@ -1,0 +1,24 @@
+<!doctype html>
+<html>
+  <head>
+    {% block head %}
+    <script src="{{ url_for('static', filename='bundle.js') }}"></script>
+    <script>
+      var auth_origin = "{{ config.AUTH_ORIGIN }}";
+      var reciever = window.recieveNewAuthMacaroon(auth_origin);
+      window.addEventListener("message", reciever, false);
+    </script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>{% block title %}{% endblock %} - Macaroon Sessions</title>
+    {% endblock %}
+  </head>
+  <body>
+    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="footer">
+      {% block footer %}
+      {% endblock %}
+    </div>
+    <iframe sandbox="allow-same-origin allow-scripts" src="{{ url_for('auth.refresh') }}" width="0" height="0" allowTransparency="true" scrolling="no" frameborder="0" style="border:none; overflow:hidden;"></iframe>
+    <input id="refresh-auth-session-button" type="button" value="Refresh Session" />
+  </body>
+</html>

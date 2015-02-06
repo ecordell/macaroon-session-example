@@ -1,12 +1,13 @@
 from pymacaroons import Macaroon, Verifier
-import arrow
+from flask import current_app
 
 from app.shared.constants import (
-   AUTH_SERVICE_LOCATION, TARGET_SERVICE_LOCATION, TIME_KEY
+    AUTH_SERVICE_LOCATION, TARGET_SERVICE_LOCATION, TIME_KEY
 )
-from app.shared.functions import create_key_id_pair
+from app.shared.functions import create_key_id_pair, expire_time_from_duration
 from app.tokens.caveat_verifiers import verify_time
 from app.service_locator import ServiceLocator
+
 
 class UserSessionFactory:
     """
@@ -22,7 +23,7 @@ class UserSessionFactory:
                 'Username required to create macaroon.'
             )
 
-    def create_macaroon(self):
+    def create_macaroons(self):
         (key_id, key) = create_key_id_pair(
             prefix='{loc}::{user}::'.format(
                 loc=TARGET_SERVICE_LOCATION,
@@ -38,12 +39,9 @@ class UserSessionFactory:
         protected = macaroon.prepare_for_request(discharge)
         return macaroon, protected
 
-    def create_token(self):
-        macaroon, protected = self.create_macaroon()
-        return '{root}::{discharge}'.format(
-            root=macaroon.serialize(),
-            discharge=protected.serialize()
-        )
+    def create_tokens(self):
+        session, discharge = self.create_macaroons()
+        return session.serialize(), session.signature, discharge.serialize()
 
     def _add_user_caveat(self, macaroon):
         """
@@ -83,15 +81,16 @@ class UserDischargeFactory:
             prefix='{loc}::{user}::'.format(
                 loc=AUTH_SERVICE_LOCATION,
                 user=self.username
-            )
+            ),
+            duration=current_app.config['MAX_SESSION_REFRESH_LENGTH']
         )
         macaroon = Macaroon(
             location=AUTH_SERVICE_LOCATION,
             key=key,
             identifier=key_id
         )
-        expires = arrow.utcnow().replace(
-            minutes=1
+        expires = expire_time_from_duration(
+            current_app.config['SESSION_LENGTH']
         )
         macaroon.add_first_party_caveat(
             '{key} < {expires}'.format(
@@ -107,24 +106,18 @@ class UserSessionValidator():
         self.redis = ServiceLocator.get_redis()
         self.logger = ServiceLocator.get_logger()
 
-    def verify(self, session):
-        macaroon, discharges = self._split_macaroon_and_discharges(session)
-        self.logger.debug('Root Macaroon:\n' + macaroon.inspect())
-        for d in discharges:
-            self.logger.debug('Discharge Macaroon:\n' + d.inspect())
+    def verify(self, session, discharge):
+        session_macaroon = Macaroon.from_binary(session)
+        discharge_macaroon = Macaroon.from_binary(discharge)
+
+        self.logger.debug('Root Macaroon:\n' + session_macaroon.inspect())
+        self.logger.debug('Discharge Macaroon:\n' + discharge_macaroon.inspect())
 
         verifier = Verifier()
         verifier.satisfy_general(verify_time)
         verified = verifier.verify(
-            macaroon,
-            self.redis.get(macaroon.identifier),
-            discharge_macaroons=discharges
+            session_macaroon,
+            self.redis.get(session_macaroon.identifier),
+            discharge_macaroons=[discharge_macaroon]
         )
         return verified
-
-    def _split_macaroon_and_discharges(self, session):
-        macaroons = session.split('::')
-        return (
-            Macaroon.from_binary(macaroons[0]),
-            [Macaroon.from_binary(m) for m in macaroons[1:]]
-        )

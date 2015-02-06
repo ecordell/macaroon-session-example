@@ -1,7 +1,9 @@
 from flask import Blueprint
 
-from app.authentication.views import LoginView, LogoutView, SignupView
-
+from app.shared.functions import get_config
+from app.authentication.views import (
+    LoginView, LogoutView, SignupView, RefreshAuthView
+)
 
 __all__ = [
     'mod_auth'
@@ -25,4 +27,7 @@ mod_auth.add_url_rule(
     '/signup/',
     view_func=SignupView.as_view('signup')
 )
-
+mod_auth.add_url_rule(
+    '/refresh/',
+    view_func=RefreshAuthView.as_view('refresh')
+)

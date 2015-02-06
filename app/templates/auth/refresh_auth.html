@@ -1,0 +1,8 @@
+<script src="{{ url_for('static', filename='refresh_auth_bundle.js') }}"></script>
+<script>
+var discharge_secret = "{{ discharge_secret }}";
+var origin = "{{ origin }}";
+var duration = "{{ config.SESSION_LENGTH }}";
+var reciever = window.recieveAuthRefreshRequest(origin, discharge_secret, duration);
+window.addEventListener("message", reciever, false);
+</script>

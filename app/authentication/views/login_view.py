@@ -1,10 +1,9 @@
 from flask import (request, render_template,
-                   flash, redirect, url_for, make_response)
+                   flash, redirect, url_for, make_response, g)
 from flask.views import MethodView
 
 from app.service_locator import ServiceLocator
-from app.shared.constants import COOKIE_KEY
-from app.shared.functions import set_session_cookie
+from app.shared.functions import (set_session_cookie, get_session_and_discharge)
 from app.authentication.forms import LoginForm
 from app.tokens.user_session import UserSessionFactory, UserSessionValidator
 
@@ -19,15 +18,12 @@ class LoginView(MethodView):
     def get(self):
         form = LoginForm(request.form)
         try:
-            if COOKIE_KEY in request.cookies:
-                session = request.cookies.get(COOKIE_KEY)
-                valid_session = UserSessionValidator().verify(session)
-                if valid_session:
-                    return render_template(
-                        "auth/logged_in.html"
-                    )
-                else:
-                    return redirect(url_for('auth.logout'))
+            session, discharge = get_session_and_discharge(request)
+            valid_session = UserSessionValidator().verify(session, discharge)
+            if valid_session:
+                return render_template(
+                    "auth/logged_in.html"
+                )
         except Exception as e:
             self.logger.exception(e)
         return render_template("auth/login.html", form=form)
@@ -44,15 +40,21 @@ class LoginView(MethodView):
 
                 flash('Welcome')
 
-                session_token = UserSessionFactory(
-                    username=form.email.data
-                ).create_token()
-
+                session_macaroon, session_signature, auth_discharge = (
+                    UserSessionFactory(
+                        username=form.email.data
+                    ).create_tokens()
+                )
                 response = make_response(render_template(
                     "auth/login.html",
                     form=form
                 ))
-                set_session_cookie(response, session_token)
+                set_session_cookie(
+                    response,
+                    session_macaroon,
+                    session_signature,
+                    auth_discharge
+                )
                 return response
             except Exception as e:
                 self.logger.exception(e)
