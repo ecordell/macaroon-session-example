@@ -38,15 +38,13 @@ class LoginView(MethodView):
                     form.password.data
                 )
 
-                flash('Welcome')
-
                 session_macaroon, session_signature, auth_discharge = (
                     UserSessionFactory(
                         username=form.email.data
                     ).create_tokens()
                 )
                 response = make_response(render_template(
-                    "auth/login.html",
+                    "auth/logged_in.html",
                     form=form
                 ))
                 set_session_cookie(

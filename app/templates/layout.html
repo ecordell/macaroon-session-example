@@ -19,6 +19,11 @@
       {% endblock %}
     </div>
     <iframe sandbox="allow-same-origin allow-scripts" src="{{ url_for('auth.refresh') }}" width="0" height="0" allowTransparency="true" scrolling="no" frameborder="0" style="border:none; overflow:hidden;"></iframe>
-    <input id="refresh-auth-session-button" type="button" value="Refresh Session" />
+    <div id="refresh-warning" style="display:none">
+      You will be logged out in <span id="logout-timer"></span>
+      <input id="refresh-auth-session-button" type="button" value="Refresh Session" />
+      <br />
+      You will be unable to refresh in <span id="max-refresh-timer"></span>
+    </div>
   </body>
 </html>
