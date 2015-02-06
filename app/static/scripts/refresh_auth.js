@@ -5,7 +5,7 @@ var moment = require('moment-interval');
 function recieveAuthRefreshRequest(origin, discharge_secret, duration, max_refresh_duration)
 {
 
-  var max_refresh_time = moment.interval(moment.utc(), moment.duration(max_refresh_duration)).end();
+  var max_refresh_time = moment.interval(moment.utc(), moment.duration(duration)).end();
 
   function reciever(event) {
 

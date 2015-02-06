@@ -9,21 +9,29 @@
       window.addEventListener("message", reciever, false);
     </script>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap-theme.min.css">
     <title>{% block title %}{% endblock %} - Macaroon Sessions</title>
     {% endblock %}
   </head>
   <body>
-    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="content" class="container">{% block content %}{% endblock %}</div>
     <div id="footer">
       {% block footer %}
       {% endblock %}
     </div>
     <iframe sandbox="allow-same-origin allow-scripts" src="{{ url_for('auth.refresh') }}" width="0" height="0" allowTransparency="true" scrolling="no" frameborder="0" style="border:none; overflow:hidden;"></iframe>
-    <div id="refresh-warning" style="display:none">
-      You will be logged out in <span id="logout-timer"></span>
-      <input id="refresh-auth-session-button" type="button" value="Refresh Session" />
-      <br />
-      You will be unable to refresh in <span id="max-refresh-timer"></span>
+    <div id="refresh-warning" class="alert alert-warning" role="alert" style="display:none">
+      <div class="row">
+        <div class="col-xs-8 col-sm-6">
+           <input id="refresh-auth-session-button" type="button" value="Refresh Session" class="btn btn-primary" />
+        </div>
+        <div class="col-xs-4 col-sm-6">
+          You will be logged out in <span id="logout-timer"></span>
+          <br />
+          You will be unable to refresh in <span id="max-refresh-timer"></span>
+        </div>
+      </div>
     </div>
   </body>
 </html>

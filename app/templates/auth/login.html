@@ -38,19 +38,19 @@
     {% endfor %}
     </div>
     {% endif %}
-    <form method="POST" action="." accept-charset="UTF-8" role="form">
-      {{ form.csrf_token }}
-      {{ render_field(form.email, placeholder="Your Email Address",
-                                  autofocus="") }}
-      {{ render_field(form.password, placeholder="Password") }}
-      <div>
-      <label>
-        {{ form.remember }} Remember Me
-      </label>
-      <a role="button" href="{{ url_for('auth.signup') }}">Don't have an account?</a><span class="clearfix"></span>
-      </div>
-      <button type="submit" name="submit">Sign in</button>
-    </form>
+    <div class="input-group">
+      <form method="POST" action="." accept-charset="UTF-8" role="form">
+        {{ form.csrf_token }}
+
+        {{ render_field(form.email, placeholder="Email Address",
+                                    autofocus="", class="form-control" ) }}
+        {{ render_field(form.password, placeholder="Password", class="form-control") }}
+        <button type="submit" name="submit" class="btn btn-primary">Sign in</button>
+      </form>
+    </div>
+  </div>
+  <div>
+    <a role="button" href="{{ url_for('auth.signup') }}">Don't have an account?</a><span class="clearfix"></span>
   </div>
 </div>
 {% endblock content %}
