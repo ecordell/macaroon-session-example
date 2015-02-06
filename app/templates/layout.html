@@ -4,6 +4,7 @@
     {% block head %}
     <script src="{{ url_for('static', filename='bundle.js') }}"></script>
     <script>
+      window.max_refresh_length = "{{ config.MAX_SESSION_REFRESH_LENGTH }}";
       var auth_origin = "{{ config.AUTH_ORIGIN }}";
       var reciever = window.recieveNewAuthMacaroon(auth_origin);
       window.addEventListener("message", reciever, false);
@@ -23,10 +24,10 @@
     <iframe sandbox="allow-same-origin allow-scripts" src="{{ url_for('auth.refresh') }}" width="0" height="0" allowTransparency="true" scrolling="no" frameborder="0" style="border:none; overflow:hidden;"></iframe>
     <div id="refresh-warning" class="alert alert-warning" role="alert" style="display:none">
       <div class="row">
-        <div class="col-xs-8 col-sm-6">
+        <div class="col-xs-4">
            <input id="refresh-auth-session-button" type="button" value="Refresh Session" class="btn btn-primary" />
         </div>
-        <div class="col-xs-4 col-sm-6">
+        <div class="col-xs-8">
           You will be logged out in <span id="logout-timer"></span>
           <br />
           You will be unable to refresh in <span id="max-refresh-timer"></span>

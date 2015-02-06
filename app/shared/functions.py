@@ -68,6 +68,20 @@ def set_session_cookie(
         secure=False,
         httponly=False
     )
+    response.set_cookie(
+        'max_refresh_time',
+        value=str(expire_time_from_duration(
+            current_app.config['MAX_SESSION_REFRESH_LENGTH']
+        )),
+        max_age=None,
+        expires=expire_time_from_duration(
+            current_app.config['MAX_SESSION_REFRESH_LENGTH']
+        ).timestamp,
+        path='/',
+        domain=None,
+        secure=False,
+        httponly=False
+    )
 
 
 def get_session_and_discharge(request):

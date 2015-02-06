@@ -2,10 +2,16 @@ var MacaroonsBuilder = require('macaroons.js').MacaroonsBuilder;
 var Macaroon = require('macaroons.js').Macaroon;
 var moment = require('moment-interval');
 
-function recieveAuthRefreshRequest(origin, discharge_secret, duration, max_refresh_duration)
-{
+function momentMin(a, b) {
+  if (a.unix() < b.unix()) {
+    return a;
+  } else {
+    return b;
+  }
+}
 
-  var max_refresh_time = moment.interval(moment.utc(), moment.duration(duration)).end();
+function recieveAuthRefreshRequest(origin, discharge_secret, duration)
+{
 
   function reciever(event) {
 
@@ -16,15 +22,18 @@ function recieveAuthRefreshRequest(origin, discharge_secret, duration, max_refre
 
     var response = {}
 
-    if (moment.utc().isBefore(max_refresh_time)) {
-      request = JSON.parse(event.data)
+    request = JSON.parse(event.data)
 
+    if (moment.utc().isBefore(moment(request['max_refresh_time']))) {
       var auth_macaroon_serialized = request['auth_macaroon_serialized'];
       var session_signature = request['session_signature'];
 
       var old_auth_macaroon = MacaroonsBuilder.deserialize(auth_macaroon_serialized);
 
-      var expiry = moment.interval(moment.utc(), moment.duration(duration)).end().toISOString();
+      var expiry = momentMin(
+          moment.interval(moment.utc(), moment.duration(duration)).end(),
+          moment(request['max_refresh_time'])
+        ).toISOString();
 
       var macaroon = new MacaroonsBuilder(
         old_auth_macaroon.location, discharge_secret, old_auth_macaroon.identifier)

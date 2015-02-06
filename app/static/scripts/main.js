@@ -3,7 +3,8 @@ var MacaroonsBuilder = require('macaroons.js').MacaroonsBuilder;
 var moment = require('moment');
 var countdown = require('countdown');
 
-var counterIntervalId = null;
+var sessionIntervalId = null;
+var maxRefreshIntervalId = null;
 
 function getSessionExpireTime() {
   var cookies = cookie.parse(document.cookie);
@@ -16,17 +17,70 @@ function getSessionExpireTime() {
   }
 }
 
+function getMaxRefreshTime() {
+  var cookies = cookie.parse(document.cookie);
+  if (cookies['max_refresh_time']) {
+    return moment(cookies['max_refresh_time']).toDate();
+  } else {
+    return null;
+  }
+}
+
 function sendAuthRefreshRequest() {
   console.log('Requesting session refresh.');
   var cookies = cookie.parse(document.cookie);
   if (cookies['auth_discharge']) {
     var payload = {
       "auth_macaroon_serialized": cookies['auth_discharge'],
-      "session_signature": cookies['session_signature']
+      "session_signature": cookies['session_signature'],
+      "max_refresh_time": getMaxRefreshTime()
     }
   }
   var o = document.getElementsByTagName('iframe')[0];
   o.contentWindow.postMessage(JSON.stringify(payload), 'http://192.168.59.103:8000/refresh-token/');
+}
+
+function updateSessionTimer(deadline) {
+  var timer = document.getElementById("logout-timer");
+  if (sessionIntervalId !== null) {
+    clearInterval(sessionIntervalId);
+  }
+  timer.innerHTML = countdown(deadline).toString();
+  sessionIntervalId = setInterval(function(){
+    if (countdown(deadline).value <= 0) {
+      timer.innerHTML = countdown(deadline).toString();
+    } else {
+      clearInterval(sessionIntervalId);
+      window.location.replace("/logout");
+    }
+  }, 1000);
+}
+
+function updateMaxRefreshTimer(deadline) {
+  var timer = document.getElementById("max-refresh-timer");
+  if (maxRefreshIntervalId !== null) {
+    clearInterval(maxRefreshIntervalId);
+  }
+  timer.innerHTML = countdown(deadline).toString();
+  maxRefreshIntervalId = setInterval(function(){
+    if (countdown(deadline).value <= 0) {
+      timer.innerHTML = countdown(deadline).toString();
+    } else {
+      clearInterval(maxRefreshIntervalId);
+      window.location.replace("/logout");
+    }
+  }, 1000);
+}
+
+function updateRefreshNotice() {
+  var refreshWarning = document.getElementById('refresh-warning');
+  if (getSessionExpireTime() !== null) {
+    refreshWarning.style.display = 'block';
+    updateSessionTimer(getSessionExpireTime());
+    updateMaxRefreshTimer(getMaxRefreshTime());
+  } else {
+    refreshWarning.style.display = 'none';
+  }
 }
 
 function recieveNewAuthMacaroon(origin)
@@ -46,40 +100,16 @@ function recieveNewAuthMacaroon(origin)
         expires: moment(request['expires']).toDate()
       }
     );
-    setupTimer("logout-timer", getSessionExpireTime());
+    updateRefreshNotice();
     return;
   }
   return reciever
 }
 
-function setupTimer(id, deadline) {
-  var timer = document.getElementById(id)
-  var refreshWarning = document.getElementById('refresh-warning');
-  if (deadline !== null) {
-    refreshWarning.style.display = 'block';
-    count = countdown(deadline);
-    if (counterIntervalId !== null) {
-      clearInterval(counterIntervalId);
-    }
-    timer.innerHTML = countdown(deadline).toString();
-    counterIntervalId = setInterval(function(){
-      if (countdown(deadline).value <= 0) {
-        timer.innerHTML = countdown(deadline).toString();
-      } else {
-        clearInterval(counterIntervalId);
-        window.location.replace("/logout");
-      }
-    }, 1000);
-  } else {
-    refreshWarning.style.display = 'none';
-  }
-}
-
-
 function onload() {
    var refreshButton = document.getElementById("refresh-auth-session-button");
    refreshButton.onclick = sendAuthRefreshRequest;
-   setupTimer("logout-timer", getSessionExpireTime());
+   updateRefreshNotice();
 }
 
 window.onload = onload;

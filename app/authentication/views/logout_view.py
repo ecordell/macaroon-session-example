@@ -7,5 +7,5 @@ from app.shared.constants import COOKIE_KEY
 class LogoutView(MethodView):
     def get(self):
         response = make_response(redirect(url_for('auth.login')))
-        response.delete_cookie(COOKIE_KEY)
+        response.delete_cookie('auth_discharge')
         return response
