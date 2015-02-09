@@ -22,7 +22,6 @@ This is a quick and dirty proof-of-concept for refreshing a macaroon session in 
 
 ## TODO
 
-- Enforce max refresh on client side (currently only enforced server side - so user can refresh past the max, but their credentials will be invalid).
 - Refactor, rewrite in ES6, wrap up into an npm module. (And a python package?)
 - Write a component (react?) that will overlay a session expiration warning.
 - Add another login option by wrapping an oauth service - Google?

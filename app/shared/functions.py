@@ -2,7 +2,7 @@ import os
 import binascii
 
 from app.shared.constants import COOKIE_KEY, SECRET_LENGTH, ID_LENGTH
-from flask import current_app
+from flask import current_app, g
 from isodate import parse_duration
 import arrow
 
@@ -91,14 +91,12 @@ def get_session_and_discharge(request):
 
 
 def create_key_id_pair(prefix=None, duration=None):
-    from app.service_locator import ServiceLocator
     if not prefix:
         prefix = ''
     secret_key = binascii.hexlify(os.urandom(SECRET_LENGTH)).decode('ascii')
     secret_key_id = prefix + binascii.hexlify(os.urandom(ID_LENGTH)).decode('ascii')
-    redis = ServiceLocator.get_redis()
-    redis.set(secret_key_id, secret_key)
+    g.redis.set(secret_key_id, secret_key)
     if duration:
         expires = parse_duration(duration).total_seconds()
-        redis.expire(secret_key_id, int(expires))
+        g.redis.expire(secret_key_id, int(expires))
     return secret_key_id, secret_key

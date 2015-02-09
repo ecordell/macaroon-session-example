@@ -1,16 +1,15 @@
 from flask import (request, render_template,
-                   flash, redirect, url_for)
+                   flash, redirect, url_for, g, current_app)
 from flask.views import MethodView
 
-from app.service_locator import ServiceLocator
 from app.authentication.forms import SignupForm
 
 
 class SignupView(MethodView):
     def __init__(self):
         super().__init__()
-        self.redis = ServiceLocator.get_redis()
-        self.logger = ServiceLocator.get_logger()
+        self.redis = g.redis
+        self.logger = current_app.logger
 
     def get(self):
         form = SignupForm(request.form)

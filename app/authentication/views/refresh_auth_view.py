@@ -1,9 +1,8 @@
 from flask import (request, render_template,
-                   flash, redirect, url_for, make_response)
+                   flash, redirect, url_for, make_response, g, current_app)
 from flask.views import MethodView
 from pymacaroons import Macaroon
 
-from app.service_locator import ServiceLocator
 from app.shared.functions import get_session_and_discharge, get_config
 from app.tokens.user_session import UserSessionValidator
 
@@ -12,8 +11,8 @@ class RefreshAuthView(MethodView):
 
     def __init__(self):
         super().__init__()
-        self.redis = ServiceLocator.get_redis()
-        self.logger = ServiceLocator.get_logger()
+        self.redis = g.redis
+        self.logger = current_app.logger
 
     def get(self):
         context = {

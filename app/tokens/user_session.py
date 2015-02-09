@@ -1,12 +1,11 @@
 from pymacaroons import Macaroon, Verifier
-from flask import current_app
+from flask import current_app, g
 
 from app.shared.constants import (
     AUTH_SERVICE_LOCATION, TARGET_SERVICE_LOCATION, TIME_KEY
 )
 from app.shared.functions import create_key_id_pair, expire_time_from_duration
 from app.tokens.caveat_verifiers import verify_time
-from app.service_locator import ServiceLocator
 
 
 class UserSessionFactory:
@@ -16,7 +15,7 @@ class UserSessionFactory:
     """
 
     def __init__(self, username):
-        self.redis = ServiceLocator.get_redis()
+        self.redis = g.redis
         self.username = username
         if not self.username:
             raise ValueError(
@@ -69,7 +68,7 @@ class UserDischargeFactory:
     """
 
     def __init__(self, username):
-        self.redis = ServiceLocator.get_redis()
+        self.redis = g.redis
         self.username = username
         if not self.username:
             raise ValueError(
@@ -103,8 +102,8 @@ class UserDischargeFactory:
 
 class UserSessionValidator():
     def __init__(self):
-        self.redis = ServiceLocator.get_redis()
-        self.logger = ServiceLocator.get_logger()
+        self.redis = g.redis
+        self.logger = current_app.logger
 
     def verify(self, session, discharge):
         session_macaroon = Macaroon.from_binary(session)

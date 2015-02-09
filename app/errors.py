@@ -1,5 +1,4 @@
-from flask import render_template
-from app.service_locator import ServiceLocator
+from flask import render_template, current_app
 
 __all__ = [
     'add_error_handlers'
@@ -11,7 +10,7 @@ def not_found(error):
 
 
 def server_error(error):
-    ServiceLocator.get_logger().exception(error)
+    current_app.logger.exception(error)
     return render_template('500.html'), 500
 
 

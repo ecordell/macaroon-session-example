@@ -1,6 +1,7 @@
 from flask import Flask
 
 from app.authentication.controllers import mod_auth as auth_module
+from .services import configure_services
 from .errors import add_error_handlers
 
 
@@ -17,6 +18,7 @@ class AppFactory:
 
         # Load config
         self.app.config.from_object('config')
+        configure_services(self.app)
         self.configure_views()
 
     def configure_views(self):
