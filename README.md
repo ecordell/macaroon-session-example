@@ -11,7 +11,7 @@ They should match the url used to access the service.
 
 This is a quick and dirty proof-of-concept for refreshing a macaroon session in browser, without communicating with a third party.
 
-## Here's how it works:
+## How it works:
 
 1. A user logs in and is given a session macaroon that will last the length of their browser session.
 2. That session macaroon has a third party caveat requiring that they prove they are logged in with the auth service (in this case, the same server).
