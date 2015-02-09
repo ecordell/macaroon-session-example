@@ -4,14 +4,12 @@ import sys
 from flask import g
 from redis import StrictRedis
 
-from app.shared.functions import get_config
-
 
 def configure_redis(app):
     @app.before_request
     def before_request():
         g.redis = StrictRedis.from_url(
-            get_config('REDIS_URL', '')
+            app.config['REDIS_URL']
         )
 
 

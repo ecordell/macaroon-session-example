@@ -1,6 +1,5 @@
 from flask import Blueprint
 
-from app.shared.functions import get_config
 from app.authentication.views import (
     LoginView, LogoutView, SignupView, RefreshAuthView
 )

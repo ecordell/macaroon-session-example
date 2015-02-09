@@ -1,9 +1,5 @@
 from flask import render_template, current_app
 
-__all__ = [
-    'add_error_handlers'
-]
-
 
 def not_found(error):
     return render_template('404.html'), 404

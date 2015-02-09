@@ -11753,7 +11753,7 @@ function sign(hash, key, hashType, crypto) {
   while (++i < hash.length) {
     pad.push(hash[i]);
   }
-  
+
   var out = crt(pad, priv, crypto);
   return out;
 }
@@ -12515,7 +12515,7 @@ function processBlock(H, M, offset) {
     }
 
     t = t|0
-    t =  rotl(t,sr[i]) 
+    t =  rotl(t,sr[i])
     t = (t+er)|0
     ar = er
     er = dr
@@ -13466,14 +13466,14 @@ function checkPrime(prime, generator) {
     return primeCache[hex];
   }
   var error = 0;
-  
+
   if (prime.isEven() ||
     !primes.simpleSieve ||
     !primes.fermatTest(prime) ||
     !millerRabin.test(prime)) {
     //not a prime so +1
     error += 1;
-    
+
     if (gen === '02' || gen === '05') {
       // we'd be able to check the generator
       // it would fail so +8
@@ -13503,9 +13503,9 @@ function checkPrime(prime, generator) {
       if (rem.cmp(THREE) && rem.cmp(SEVEN)) {
         // prime mod 10 needs to equal 3 or 7
         error += 8;
-      } 
+      }
       break;
-    default: 
+    default:
       error += 4;
   }
   primeCache[hex] = error;
@@ -13530,7 +13530,7 @@ function DH(prime, generator, malleable) {
   this._primeLen = prime.length;
   this._pub = void 0;
   this._priv = void 0;
-  
+
   if (malleable) {
     this.setPublicKey = setPublicKey;
     this.setPrivateKey = setPrivateKey;
@@ -14284,7 +14284,7 @@ module.exports = function (crypto) {
     } else {
       padding = 4;
     }
-    
+
     var key = parseKeys(private_key, crypto);
     var k = key.modulus.byteLength();
     if (enc.length > k || new bn(enc).cmp(key.modulus) >= 0) {
@@ -17165,13 +17165,13 @@ Script.prototype.runInContext = function (context) {
     if (!(context instanceof Context)) {
         throw new TypeError("needs a 'context' argument.");
     }
-    
+
     var iframe = document.createElement('iframe');
     if (!iframe.style) iframe.style = {};
     iframe.style.display = 'none';
-    
+
     document.body.appendChild(iframe);
-    
+
     var win = iframe.contentWindow;
     var wEval = win.eval, wExecScript = win.execScript;
 
@@ -17180,7 +17180,7 @@ Script.prototype.runInContext = function (context) {
         wExecScript.call(win, 'null');
         wEval = win.eval;
     }
-    
+
     forEach(Object_keys(context), function (key) {
         win[key] = context[key];
     });
@@ -17189,11 +17189,11 @@ Script.prototype.runInContext = function (context) {
             win[key] = context[key];
         }
     });
-    
+
     var winKeys = Object_keys(win);
 
     var res = wEval.call(win, this.code);
-    
+
     forEach(Object_keys(win), function (key) {
         // Avoid copying circular objects like `top` and `window` by only
         // updating existing context properties or new properties in the `win`
@@ -17208,9 +17208,9 @@ Script.prototype.runInContext = function (context) {
             defineProp(context, key, win[key]);
         }
     });
-    
+
     document.body.removeChild(iframe);
-    
+
     return res;
 };
 
@@ -17599,7 +17599,7 @@ function(module) {
 
 	/**
 	 * Formats the entries as English labels
-	 * 
+	 *
 	 * @private
 	 * @param {Timespan} ts
 	 * @return {Array}
@@ -17608,7 +17608,7 @@ function(module) {
 
 	/**
 	 * Timespan representation of a duration of time
-	 * 
+	 *
 	 * @private
 	 * @this {Timespan}
 	 * @constructor
@@ -17617,7 +17617,7 @@ function(module) {
 
 	/**
 	 * Formats the Timespan as a sentance
-	 * 
+	 *
 	 * @private
 	 * @return {string}
 	 */
@@ -17636,7 +17636,7 @@ function(module) {
 
 	/**
 	 * Formats the Timespan as HTML
-	 * 
+	 *
 	 * @private
 	 * @param {string} tag HTML tag name to wrap each value
 	 * @return {string}
@@ -17661,7 +17661,7 @@ function(module) {
 
 	/**
 	 * Formats the entries as English labels
-	 * 
+	 *
 	 * @private
 	 * @param {Timespan} ts
 	 * @return {Array}
@@ -17729,7 +17729,7 @@ function(module) {
 
 	/**
 	 * Borrow any underflow units, carry any overflow units
-	 * 
+	 *
 	 * @private
 	 * @param {Timespan} ts
 	 * @param {string} toUnit
@@ -17821,7 +17821,7 @@ function(module) {
 
 	/**
 	 * Ripple up partial units one place
-	 * 
+	 *
 	 * @private
 	 * @param {Timespan} ts timespan
 	 * @param {number} frac accumulated fractional value
@@ -17855,7 +17855,7 @@ function(module) {
 
 	/**
 	 * Ripple up partial units to next existing
-	 * 
+	 *
 	 * @private
 	 * @param {Timespan} ts
 	 * @param {number} digits max number of decimal digits to output
@@ -17896,7 +17896,7 @@ function(module) {
 
 	/**
 	 * Borrow any underflow units, carry any overflow units
-	 * 
+	 *
 	 * @private
 	 * @param {Timespan} ts
 	 */
@@ -18003,7 +18003,7 @@ function(module) {
 
 	/**
 	 * Remove any units not requested
-	 * 
+	 *
 	 * @private
 	 * @param {Timespan} ts
 	 * @param {number} units the units to populate
@@ -18121,7 +18121,7 @@ function(module) {
 
 	/**
 	 * Populates the Timespan object
-	 * 
+	 *
 	 * @private
 	 * @param {Timespan} ts
 	 * @param {Date} start the starting date
@@ -18171,7 +18171,7 @@ function(module) {
 
 	/**
 	 * Determine an appropriate refresh rate based upon units
-	 * 
+	 *
 	 * @private
 	 * @param {number} units the units to populate
 	 * @return {number} milliseconds to delay
@@ -18196,7 +18196,7 @@ function(module) {
 			// refresh hourly
 			return MILLISECONDS_PER_SECOND * SECONDS_PER_MINUTE * MINUTES_PER_HOUR;
 		}
-		
+
 		if (units & DAYS) {
 			// refresh daily
 			return MILLISECONDS_PER_SECOND * SECONDS_PER_MINUTE * MINUTES_PER_HOUR * HOURS_PER_DAY;
@@ -18208,7 +18208,7 @@ function(module) {
 
 	/**
 	 * API entry point
-	 * 
+	 *
 	 * @public
 	 * @param {Date|number|null|function(Timespan)} start the starting date
 	 * @param {Date|number|null|function(Timespan)} end the ending date
@@ -19569,7 +19569,7 @@ var SIGMA = require('./stream').SIGMA;
  * Replacement of crypto_box_keypair in crypto_box/curve25519xsalsa20poly1305/ref/keypair.c
  * Public key can be generated for any given secret key, which itself should be randomly generated.
  * @param sk is Uint8Array of 32 bytes of a secret key.
- * @returns Uint8Array with 32 bytes of a public key, that corresponds given secret key. 
+ * @returns Uint8Array with 32 bytes of a public key, that corresponds given secret key.
  */
 function generate_pubkey(sk) {
 	"use strict";
@@ -19685,7 +19685,7 @@ function openWithNonce(c, pk, sk, arrFactory) {
 }
 
 /**
- * 
+ *
  * @param pk is Uint8Array, 32 bytes long public key of message receiving party.
  * @param sk is Uint8Array, 32 bytes long secret key of message sending party.
  * @param nextNonce is nonce, which should be used for the very first packing.
@@ -19802,7 +19802,7 @@ function salsa20(outArr, inArr, k, c, arrFactory) {
 	,  x15 = load_littleendian(c, 12)
 	,  j15 = x15
 	, t = 0;
-	
+
 	for (var i=20; i>0; i-=2) {
 		t = ( x0+x12) & 0xffffffff;
 		 x4 ^= ((t << 7) & 0xffffffff) | (t >>> 25);
@@ -20156,7 +20156,7 @@ function crypto_onetimeauth(outArr, inArr, k, arrFactory) {
 	r[14] = k[14];
 	r[15] = k[15] & 15;
 	r[16] = 0;
-	
+
 	for (var j=0; j<17; j+=1) { h[j] = 0; }
 
 	var j = 0;
@@ -20385,7 +20385,7 @@ function square(out, a) {
 		}
 		u *= 2;
 		u &= 0xffffffff;
-		if ((i & 1) === 0) {	// this assures i even, so Math.floor() is not needed below 
+		if ((i & 1) === 0) {	// this assures i even, so Math.floor() is not needed below
 			u += mult32(a[i/2], a[i/2]);
 			u &= 0xffffffff;
 			u += 38 * mult32(a[i/2 + 16], a[i/2 + 16]);	// multiplication by 38 is safe here
@@ -20425,7 +20425,7 @@ function select(p, q, r, s, b) {
  */
 function mainloop(work, e, arrFactory) {
 	"use strict";
-	
+
 	var xzm1 = arrFactory.getUint32Array(64)
 	, xzm = arrFactory.getUint32Array(64)
 	, xzmb = arrFactory.getUint32Array(64)
@@ -20449,7 +20449,7 @@ function mainloop(work, e, arrFactory) {
 
 	xzm[0] = 1;
 	for (var j=1; j<64; j+=1) { xzm[j] = 0; }
-	  
+
 	// views of last 32 elements of original arrays
 	var xzmb_32 = xzmb.subarray(32, 64)
 	, xzm1b_32 = xzm1b.subarray(32, 64)
@@ -20487,7 +20487,7 @@ function mainloop(work, e, arrFactory) {
 	}
 
 	work.set(xzm);
-	
+
 	arrFactory.recycle(
 			xzm1, xzm, xzmb, xzm1b, xznb, xzn1b, a0, a1, b0, b1, c1, r, s, t, u);
 }
@@ -20500,7 +20500,7 @@ function mainloop(work, e, arrFactory) {
  */
 function recip(out, z, arrFactory) {
 	"use strict";
-	
+
 	var z2 = arrFactory.getUint32Array(32)
 	, z9 = arrFactory.getUint32Array(32)
 	, z11 = arrFactory.getUint32Array(32)
@@ -20563,7 +20563,7 @@ function recip(out, z, arrFactory) {
 	/* 2^254 - 2^4 */ square(t0,t1);
 	/* 2^255 - 2^5 */ square(t1,t0);
 	/* 2^255 - 21 */ mult(out,t1,z11);
-	
+
 	arrFactory.recycle(
 			z2, z9, z11, z2_5_0, z2_10_0, z2_20_0, z2_50_0, z2_100_0, t0, t1);
 }
@@ -20578,7 +20578,7 @@ function recip(out, z, arrFactory) {
  */
 function crypto_scalarmult(q, n, p, arrFactory) {
 	"use strict";
-	
+
 	if (!arrFactory) { arrFactory = new ArraysFactory(); }
 	var work = arrFactory.getUint32Array(96)
 	, e = arrFactory.getUint32Array(32);
@@ -20587,19 +20587,19 @@ function crypto_scalarmult(q, n, p, arrFactory) {
 	e[0] &= 248;
 	e[31] &= 127;
 	e[31] |= 64;
-	
+
 	// partial views of work array
 	var work_32 = work.subarray(32, 64)
 	, work_64 = work.subarray(64, 96);
 
 	work.set(p);	// sets first 32 elements, as p.length===32
-	
+
 	mainloop(work,e,arrFactory);
 	recip(work_32,work_32,arrFactory);
 	mult(work_64,work,work_32);
 	freeze(work_64,arrFactory);
 	q.set(work_64);
-	
+
 	arrFactory.recycle(work, e);
 }
 
@@ -20669,23 +20669,23 @@ function checkPackArgs(m, n, k) {
  */
 function xsalsa20poly1305_pad_and_pack(c, m, n, k, arrFactory) {
 	"use strict";
-	
+
 	if (c.length < 32+m.length) { throw new Error("Given array c is too short for output."); }
 	if (!arrFactory) { arrFactory = new TypedArraysFactory(); }
-	
+
 	stream_xsalsa20_xor(c,m,32,n,k,arrFactory);
 
 	var dataPartOfC = c.subarray(32)
 	, polyOut = c.subarray(16,32)
 	, polyKey = c.subarray(0,32);
-	
+
 	onetimeauth_poly1305(polyOut, dataPartOfC, polyKey, arrFactory);
-	
+
 	// clear poly key part, which is not overwritten by poly output
 	for (var i=0; i<16; i+=1) {
 		c[i] = 0;
 	}
-	
+
 }
 
 /**
@@ -20721,7 +20721,7 @@ function pack(m, n, k, arrFactory) {
  */
 function xsalsa20poly1305_pad_open_trim(c, n, k, arrFactory) {
 	"use strict";
-	
+
 	if (c.BYTES_PER_ELEMENT !== 1) { throw new TypeError("Cipher array c must be Uint8Array."); }
 	if (c.length < 17) { throw new Error(
 			"Cipher array c should have at least 17 elements (bytes) in it, but is only "+
@@ -20735,15 +20735,15 @@ function xsalsa20poly1305_pad_open_trim(c, n, k, arrFactory) {
 			"Key array k should have 32 elements (bytes) in it, but it is "+
 			k.length+" elements long."); }
 	if (!arrFactory) { arrFactory = new TypedArraysFactory(); }
-	
+
 	var m = new Uint8Array(c.length+16);
-	
+
 	var subkey = arrFactory.getUint8Array(32);
 	stream_xsalsa20(subkey,n,k,arrFactory);
-	
+
 	var polyPartOfC = c.subarray(0,16);
 	var msgPartOfC = c.subarray(16);
-	
+
 	if (!onetimeauth_poly1305_verify(polyPartOfC,msgPartOfC,subkey,arrFactory)) {
 		var err = new Error("Cipher bytes fail verification.");
 		err.failedCipherVerification = true;
@@ -20760,7 +20760,7 @@ function xsalsa20poly1305_pad_open_trim(c, n, k, arrFactory) {
 	arrFactory.recycle(subkey);
 
 	m = m.subarray(32);
-	
+
 	return m;
 }
 
@@ -20829,7 +20829,7 @@ function copyNonceFrom(c) {
 }
 
 /**
- * 
+ *
  * @param key for new encryptor.
  * Note that key will be copied, thus, if given array shall never be used anywhere, it should
  * be wiped after this call.
@@ -20849,7 +20849,7 @@ function makeEncryptor(key, nextNonce) {
 	if (key.length !== 32) { throw new Error(
 			"Key array key should have 32 elements (bytes) in it, but it is "+
 			key.length+" elements long."); }
-	
+
 	// set variable in the closure
 	var arrFactory = new TypedArraysFactory()
 	, pack, open, destroy;
@@ -20883,7 +20883,7 @@ function makeEncryptor(key, nextNonce) {
 		nextNonce = null;
 		arrFactory = null;
 	};
-	
+
 	// arrange and freeze resulting object
 	var encryptor = {
 		pack: pack,
@@ -20891,7 +20891,7 @@ function makeEncryptor(key, nextNonce) {
 		destroy: destroy
 	};
 	Object.freeze(encryptor);
-	
+
 	return encryptor;
 }
 
@@ -20946,7 +20946,7 @@ var sigma = new Uint8Array(16);
  */
 function stream_salsa20(c, n, k, arrFactory) {
 	"use strict";
-	
+
 	if (!arrFactory) { arrFactory = new ArraysFactory(); }
 	var inArr = arrFactory.getUint8Array(16)
 	, u = 0;
@@ -20961,9 +20961,9 @@ function stream_salsa20(c, n, k, arrFactory) {
 	, outArr;
 	while (clen >= 64) {
 		outArr = new Uint8Array(c, cstart, 64);
-		
+
 		core.salsa20(outArr,inArr,k,sigma,arrFactory);
-		
+
 		u = 1;
 		for (var i=8; i<16; i+=1) {
 			u += inArr[i];
@@ -20984,7 +20984,7 @@ function stream_salsa20(c, n, k, arrFactory) {
 		}
 		arrFactory.recycle(block);
 	}
-	
+
 	arrFactory.recycle(inArr);
 }
 
@@ -21003,7 +21003,7 @@ function stream_salsa20(c, n, k, arrFactory) {
  */
 function stream_salsa20_xor(c, m, mPadLen, n, k, arrFactory) {
 	"use strict";
-	
+
 	if (!arrFactory) { arrFactory = new ArraysFactory(); }
 	var inArr = arrFactory.getUint8Array(16)
 	, block = arrFactory.getUint8Array(64)
@@ -21015,7 +21015,7 @@ function stream_salsa20_xor(c, m, mPadLen, n, k, arrFactory) {
 	for (var i=8; i<16; i+=1) { inArr[i] = 0; }
 
 	var mWithPadLen = m.length+mPadLen;
-	
+
 	if (mWithPadLen < 64) {
 		core.salsa20(block,inArr,k,sigma,arrFactory);
 		for (var i=0; i<mPadLen; i+=1) {
@@ -21026,7 +21026,7 @@ function stream_salsa20_xor(c, m, mPadLen, n, k, arrFactory) {
 		}
 		return;
 	}
-	
+
 	var cp = 0
 	, mp = 0;
 	{ // first loop with pad
@@ -21037,7 +21037,7 @@ function stream_salsa20_xor(c, m, mPadLen, n, k, arrFactory) {
 		for (var i=mPadLen; i<64; i+=1) {
 			c[i] = m[i-mPadLen] ^ block[i];
 		}
-		
+
 		u = 1;
 		for (var i=8; i<16; i+=1) {
 			u += inArr[i];
@@ -21056,7 +21056,7 @@ function stream_salsa20_xor(c, m, mPadLen, n, k, arrFactory) {
 		for (var i=0; i<64; i+=1) {
 			c[cp+i] = m[mp+i] ^ block[i];
 		}
-		
+
 		u = 1;
 		for (var i=8; i<16; i+=1) {
 			u += inArr[i];
@@ -21076,7 +21076,7 @@ function stream_salsa20_xor(c, m, mPadLen, n, k, arrFactory) {
 			c[cp+i] = m[mp+i] ^ block[i];
 		}
 	}
-	
+
 	arrFactory.recycle(inArr, block);
 }
 
@@ -21090,17 +21090,17 @@ function stream_salsa20_xor(c, m, mPadLen, n, k, arrFactory) {
  */
 function stream_xsalsa20(c, n, k, arrFactory) {
 	"use strict";
-	
+
 	if (!arrFactory) {
 		arrFactory = new ArraysFactory();
 	}
 
 	var subkey = arrFactory.getUint8Array(32)
 	, n_16 = n.subarray(16, 24);
-	
+
 	core.hsalsa20(subkey,n,k,sigma,arrFactory);
 	stream_salsa20(c,n_16,subkey,arrFactory);
-	
+
 	arrFactory.recycle(subkey);
 }
 
@@ -21117,14 +21117,14 @@ function stream_xsalsa20(c, n, k, arrFactory) {
  */
 function stream_xsalsa20_xor(c, m, mPadLen, n, k, arrFactory) {
 	"use strict";
-	
+
 	if (!arrFactory) { arrFactory = new ArraysFactory(); }
 	var subkey = arrFactory.getUint8Array(32)
 	, n_16 = n.subarray(16, 24);
-	
+
 	core.hsalsa20(subkey,n,k,sigma,arrFactory);
 	stream_salsa20_xor(c,m,mPadLen,n_16,subkey,arrFactory);
-	
+
 	arrFactory.recycle(subkey);
 }
 
@@ -21204,7 +21204,7 @@ var MIN_SEGMENT_SIZE = 0xff
  *  - bytes with a start string (3 for 'xsp' string)
  *  - 72 bytes of file key encrypted into with-nonce form (40+32=72)
  *  - 4 bytes with a normal total segment size (the actual segment
- *    size can be smaller, but not bigger than this value) 
+ *    size can be smaller, but not bigger than this value)
  */
 , FILE_HEADER_LEN = START_STRING.length + 72 + 4
 /**
@@ -21321,7 +21321,7 @@ function packSegment(data, fileKeyEnvelope, maxSegSize,
  *  c) fileKeyEnvelope, present only if isFirstSeg===true, is an Uint8Array
  *     containing encrypted key of this file in a with-nonce format;
  *  d) commonSegSize, present only if isFirstSeg===true, is an integer, telling
- *     a maximum, or common segment size, used in this file. 
+ *     a maximum, or common segment size, used in this file.
  */
 function readHeaders(seg) {
 	"use strict";
@@ -21800,7 +21800,7 @@ module.exports = {
  * file, you can obtain one at http://mozilla.org/MPL/2.0/. */
 
 /**
- * 
+ *
  * @param n is Uint8Array, 24 bytes long nonce that will be changed in-place.
  * @param delta is a number, by which 8-byte numbers, constituting given
  * 24-bytes nonce, are advanced.

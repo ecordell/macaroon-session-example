@@ -1,7 +1,7 @@
-from flask_wtf import Form
-
 from wtforms.fields import TextField, PasswordField, BooleanField
 from wtforms.validators import Required, Email
+
+from flask_wtf import Form
 
 
 class LoginForm(Form):

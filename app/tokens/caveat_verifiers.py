@@ -1,9 +1,5 @@
 import arrow
 
-__all__ = [
-    'verify_time',
-]
-
 
 def verify_time(caveat):
     if not caveat.startswith('time < '):

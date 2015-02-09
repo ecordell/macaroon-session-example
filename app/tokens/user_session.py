@@ -1,10 +1,8 @@
 from pymacaroons import Macaroon, Verifier
 from flask import current_app, g
 
-from app.shared.constants import (
-    AUTH_SERVICE_LOCATION, TARGET_SERVICE_LOCATION, TIME_KEY
-)
-from app.shared.functions import create_key_id_pair, expire_time_from_duration
+from app.utils import expire_time_from_duration
+from app.tokens.utils import create_key_id_pair
 from app.tokens.caveat_verifiers import verify_time
 
 
@@ -25,12 +23,12 @@ class UserSessionFactory:
     def create_macaroons(self):
         (key_id, key) = create_key_id_pair(
             prefix='{loc}::{user}::'.format(
-                loc=TARGET_SERVICE_LOCATION,
+                loc=current_app.config['TARGET_SERVICE_LOCATION'],
                 user=self.username
             )
         )
         macaroon = Macaroon(
-            location=TARGET_SERVICE_LOCATION,
+            location=current_app.config['TARGET_SERVICE_LOCATION'],
             key=key,
             identifier=key_id
         )
@@ -52,7 +50,7 @@ class UserSessionFactory:
         discharge = UserDischargeFactory(self.username).create_macaroon()
         key_id = discharge.identifier
         macaroon.add_third_party_caveat(
-            AUTH_SERVICE_LOCATION,
+            current_app.config['AUTH_SERVICE_LOCATION'],
             self.redis.get(key_id),
             key_id
         )
@@ -78,13 +76,13 @@ class UserDischargeFactory:
     def create_macaroon(self):
         (key_id, key) = create_key_id_pair(
             prefix='{loc}::{user}::'.format(
-                loc=AUTH_SERVICE_LOCATION,
+                loc=current_app.config['AUTH_SERVICE_LOCATION'],
                 user=self.username
             ),
             duration=current_app.config['MAX_SESSION_REFRESH_LENGTH']
         )
         macaroon = Macaroon(
-            location=AUTH_SERVICE_LOCATION,
+            location=current_app.config['AUTH_SERVICE_LOCATION'],
             key=key,
             identifier=key_id
         )
@@ -93,7 +91,7 @@ class UserDischargeFactory:
         )
         macaroon.add_first_party_caveat(
             '{key} < {expires}'.format(
-                key=TIME_KEY,
+                key=current_app.config['TIME_KEY'],
                 expires=str(expires)
             )
         )

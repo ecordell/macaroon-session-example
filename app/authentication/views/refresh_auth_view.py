@@ -1,9 +1,9 @@
 from flask import (request, render_template,
-                   flash, redirect, url_for, make_response, g, current_app)
+                   g, current_app)
 from flask.views import MethodView
 from pymacaroons import Macaroon
 
-from app.shared.functions import get_session_and_discharge, get_config
+from app.utils import get_session_and_discharge
 from app.tokens.user_session import UserSessionValidator
 
 
@@ -13,21 +13,21 @@ class RefreshAuthView(MethodView):
         super().__init__()
         self.redis = g.redis
         self.logger = current_app.logger
+        self.context = {}
 
     def get(self):
-        context = {
-            'origin': get_config('SERVER_NAME')
-        }
         try:
             session, discharge = get_session_and_discharge(request)
             valid_session = UserSessionValidator().verify(session, discharge)
             if valid_session:
-                context['discharge_secret'] = (
+                self.context['discharge_secret'] = (
                     self._get_secret_for_discharge(discharge)
                 )
+            else:
+                self.context['discharge_secret'] = ''
         except Exception as e:
             self.logger.exception(e)
-        return render_template("auth/refresh_auth.html", **context)
+        return render_template("auth/refresh_auth.html", **self.context)
 
     def _get_secret_for_discharge(self, discharge):
         discharge_macaroon = Macaroon.from_binary(discharge)

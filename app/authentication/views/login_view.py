@@ -1,8 +1,8 @@
 from flask import (request, render_template,
-                   flash, redirect, url_for, make_response, g, current_app)
+                   make_response, g, current_app)
 from flask.views import MethodView
 
-from app.shared.functions import (set_session_cookie, get_session_and_discharge)
+from app.utils import get_session_and_discharge, expire_time_from_duration
 from app.authentication.forms import LoginForm
 from app.tokens.user_session import UserSessionFactory, UserSessionValidator
 
@@ -46,7 +46,7 @@ class LoginView(MethodView):
                     "auth/logged_in.html",
                     form=form
                 ))
-                set_session_cookie(
+                self._set_session_cookie(
                     response,
                     session_macaroon,
                     session_signature,
@@ -66,3 +66,53 @@ class LoginView(MethodView):
                     given=password, expected=stored_password
                 )
             )
+
+    def _set_session_cookie(
+        self, response, session_macaroon, session_signature, auth_discharge
+    ):
+        response.set_cookie(
+            current_app.config['SESSION_COOKIE_KEY'],
+            value=session_macaroon,
+            max_age=None,
+            expires=None,
+            path='/',
+            domain=None,
+            secure=False,
+            httponly=True
+        )
+        response.set_cookie(
+            current_app.config['SESSION_SIGNATURE_KEY'],
+            value=session_signature,
+            max_age=None,
+            expires=None,
+            path='/',
+            domain=None,
+            secure=False,
+            httponly=False
+        )
+        response.set_cookie(
+            current_app.config['AUTH_REFRESH_DISCHARGE_KEY'],
+            value=auth_discharge,
+            max_age=None,
+            expires=expire_time_from_duration(
+                current_app.config['SESSION_LENGTH']
+            ).timestamp,
+            path='/',
+            domain=None,
+            secure=False,
+            httponly=False
+        )
+        response.set_cookie(
+            current_app.config['MAX_SESSION_REFRESH_KEY'],
+            value=str(expire_time_from_duration(
+                current_app.config['MAX_SESSION_REFRESH_LENGTH']
+            )),
+            max_age=None,
+            expires=expire_time_from_duration(
+                current_app.config['MAX_SESSION_REFRESH_LENGTH']
+            ).timestamp,
+            path='/',
+            domain=None,
+            secure=False,
+            httponly=False
+        )

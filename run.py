@@ -1,6 +1,13 @@
+import os
+
 from app import app
-from app.shared.functions import get_config
 
-debug = get_config('DEBUG')
 
-app.run(host='0.0.0.0', port=8000, debug=debug)
+def get_debug():
+    val = os.environ.get('DEBUG')
+    if val == 'True':
+        return True
+    return False
+
+
+app.run(host='0.0.0.0', port=8000, debug=get_debug())
