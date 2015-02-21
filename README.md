@@ -17,7 +17,7 @@ This is a quick and dirty proof-of-concept for refreshing a macaroon session in 
 2. That session macaroon has a third party caveat requiring that they prove they are logged in with the auth service (in this case, the same server).
 3. The user is initially given a discharge macaroon proving they are logged in (after successful login), but it is short-lived.
 4. An invisible sandboxed iframe from the auth service is embedded into the page, and contains the key necessary to mint a new discharge macaroon.
-5. At any time (user manually clicks a "refresh" link, or automatically in response to user interaction) the user's discharge macaroon can be refreshed by using cross-document messaging with the auth iframe, extending the user's session.
+5. At any time (user manually clicks a "refresh" link, or automatically in response to user interaction) the user's discharged macaroon can be refreshed by using cross-document messaging with the auth iframe, extending the user's session.
 6. Because the discharge key is available to the client, a limit is placed on the length of time a session may be refreshed.
 7. When the user's session expires (they forget to refresh) or the refresh limit is reached, they are automatically logged out.
 
