@@ -1,10 +1,10 @@
 # Getting Started
 
-- Install docker and fig
-- `fig build web && fig up`
+- Install docker and compose
+- `docker-compose build web && docker-compose up`
 
 It may be necessary to change the `SERVER_NAME` and `AUTH_ORIGIN` env
-variables in the `fig.yml` file depending on your local fig/docker setup. 
+variables in the `docker-compose.yml` file depending on your local compose/docker setup. 
 They should match the url used to access the service.
 
 # What is this?

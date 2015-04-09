@@ -1,0 +1,22 @@
+redis:
+  image: dockerfile/redis
+
+web:
+  build: .
+  command: python3 run.py
+  working_dir: /usr/src/app
+  volumes:
+    - .:/usr/src/app
+  ports:
+    - "8000:8000"
+  links:
+    - redis
+  environment:
+    DEBUG: True
+    THREADS_PER_PAGE: 1
+    CSRF_SESSION_KEY: "default_secret_csrf"
+    REDIS_URL: redis://redis:6379
+    SERVER_NAME: 192.168.59.103:8000
+    AUTH_ORIGIN: http://192.168.59.103:8000
+    SESSION_LENGTH: PT1M
+    MAX_SESSION_REFRESH_LENGTH: PT2M
