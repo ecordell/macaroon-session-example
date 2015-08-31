@@ -1,3 +1,5 @@
+![Gif of session refresh](http://i.giphy.com/xTiTnq4HBjkRgax8Jy.gif)
+
 # Getting Started
 
 - Install docker and compose
