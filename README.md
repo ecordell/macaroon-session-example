@@ -25,8 +25,7 @@ This is a quick and dirty proof-of-concept for refreshing a macaroon session in 
 
 ## Inspiration
 
-This is directly inspired by a suggestion from the [Macaroons Paper]
-(http://research.google.com/pubs/pub41892.html):
+This is directly inspired by a suggestion from the [Macaroons Paper](http://research.google.com/pubs/pub41892.html):
 
 > *Local Discharging of Third-party Caveats*
 >
