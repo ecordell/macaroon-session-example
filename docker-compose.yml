@@ -1,5 +1,5 @@
 redis:
-  image: dockerfile/redis
+  image: redis
 
 web:
   build: .
