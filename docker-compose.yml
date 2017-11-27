@@ -1,5 +1,5 @@
 redis:
-  image: dockerfile/redis
+  image: redis
 
 web:
   build: .
@@ -12,7 +12,7 @@ web:
   links:
     - redis
   environment:
-    DEBUG: True
+    DEBUG: 'true'
     THREADS_PER_PAGE: 1
     CSRF_SESSION_KEY: "default_secret_csrf"
     REDIS_URL: redis://redis:6379
